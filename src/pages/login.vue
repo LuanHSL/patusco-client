@@ -1,11 +1,10 @@
 <script setup>
-import { useTheme } from 'vuetify'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import { useTheme } from 'vuetify'
 
 const form = ref({
   email: '',
@@ -23,8 +22,6 @@ const isPasswordVisible = ref(false)
 </script>
 
 <template>
-  <!-- eslint-disable vue/no-v-html -->
-
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
     <VCard
       class="auth-card pa-4 pt-7"
@@ -102,37 +99,6 @@ const isPasswordVisible = ref(false)
                 Login
               </VBtn>
             </VCol>
-
-            <!-- create account -->
-            <VCol
-              cols="12"
-              class="text-center text-base"
-            >
-              <span>New on our platform?</span>
-              <RouterLink
-                class="text-primary ms-2"
-                to="/register"
-              >
-                Create an account
-              </RouterLink>
-            </VCol>
-
-            <VCol
-              cols="12"
-              class="d-flex align-center"
-            >
-              <VDivider />
-              <span class="mx-4">or</span>
-              <VDivider />
-            </VCol>
-
-            <!-- auth providers -->
-            <VCol
-              cols="12"
-              class="text-center"
-            >
-              <AuthProvider />
-            </VCol>
           </VRow>
         </VForm>
       </VCardText>
@@ -158,6 +124,49 @@ const isPasswordVisible = ref(false)
   </div>
 </template>
 
-<style lang="scss">
-@use "@core/scss/template/pages/page-auth";
+<style scoped>
+.auth-wrapper {
+  min-block-size: calc(var(--vh, 1vh) * 100);
+}
+
+.auth-footer-mask {
+  position: absolute;
+  inset-block-end: 0;
+  min-inline-size: 100%;
+}
+
+.auth-card {
+  z-index: 1 !important;
+}
+
+.auth-footer-start-tree,
+.auth-footer-end-tree {
+  position: absolute;
+  z-index: 1;
+}
+
+.auth-footer-start-tree {
+  inset-block-end: 0;
+  inset-inline-start: 0;
+}
+
+.auth-footer-end-tree {
+  inset-block-end: 0;
+  inset-inline-end: 0;
+}
+
+.auth-illustration {
+  z-index: 1;
+}
+
+.auth-logo {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 2rem;
+  inset-inline-start: 2.3rem;
+}
+
+.auth-bg {
+  background-color: rgb(var(--v-theme-surface));
+}
 </style>

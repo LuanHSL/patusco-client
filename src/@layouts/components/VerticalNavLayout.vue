@@ -1,6 +1,6 @@
 <script>
-import { useDisplay } from 'vuetify'
 import VerticalNav from '@layouts/components/VerticalNav.vue'
+import { useDisplay } from 'vuetify'
 
 export default defineComponent({
   setup(props, { slots }) {
@@ -34,13 +34,6 @@ export default defineComponent({
 
       const main = h('main', { class: 'layout-page-content' }, h('div', { class: 'page-content-container' }, slots.default?.()))
 
-
-      // 👉 Footer
-      const footer = h('footer', { class: 'layout-footer' }, [
-        h('div', { class: 'footer-content-container' }, slots.footer?.()),
-      ])
-
-
       // 👉 Overlay
       const layoutOverlay = h('div', {
         class: ['layout-overlay', { visible: isLayoutOverlayVisible.value }],
@@ -58,7 +51,6 @@ export default defineComponent({
         h('div', { class: 'layout-content-wrapper' }, [
           navbar,
           main,
-          footer,
         ]),
         layoutOverlay,
       ])
@@ -120,11 +112,6 @@ export default defineComponent({
 
   &.layout-navbar-hidden .layout-navbar {
     @extend %layout-navbar-hidden;
-  }
-
-  // 👉 Footer
-  .layout-footer {
-    @include mixins.boxed-content;
   }
 
   // 👉 Layout overlay

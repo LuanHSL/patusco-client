@@ -12,26 +12,6 @@ export const routes = [
         path: 'account-settings/:id?',
         component: () => import('@/pages/account-settings.vue'),
       },
-      {
-        path: 'typography',
-        component: () => import('@/pages/typography.vue'),
-      },
-      {
-        path: 'icons',
-        component: () => import('@/pages/icons.vue'),
-      },
-      {
-        path: 'cards',
-        component: () => import('@/pages/cards.vue'),
-      },
-      {
-        path: 'tables',
-        component: () => import('@/pages/tables.vue'),
-      },
-      {
-        path: 'form-layouts',
-        component: () => import('@/pages/form-layouts.vue'),
-      },
     ],
   },
   {
@@ -41,10 +21,6 @@ export const routes = [
       {
         path: 'login',
         component: () => import('@/pages/login.vue'),
-      },
-      {
-        path: 'register',
-        component: () => import('@/pages/register.vue'),
       },
       {
         path: '/:pathMatch(.*)*',

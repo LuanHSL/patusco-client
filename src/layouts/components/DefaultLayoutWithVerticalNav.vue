@@ -1,10 +1,9 @@
 <script setup>
+import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import NavItems from '@/layouts/components/NavItems.vue'
+import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import Footer from '@/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
 </script>
 
 <template>
@@ -20,35 +19,7 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
           <VIcon icon="ri-menu-line" />
         </IconBtn>
 
-        <!-- 👉 Search -->
-        <div
-          class="d-flex align-center cursor-pointer"
-          style="user-select: none;"
-        >
-          <!-- 👉 Search Trigger button -->
-          <IconBtn>
-            <VIcon icon="ri-search-line" />
-          </IconBtn>
-
-          <span class="d-none d-md-flex align-center text-disabled">
-            <span class="me-3">Search</span>
-            <span class="meta-key">&#8984;K</span>
-          </span>
-        </div>
-
         <VSpacer />
-
-        <IconBtn
-          href="https://github.com/themeselection/materio-vuetify-vuejs-admin-template-free"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <VIcon icon="ri-github-fill" />
-        </IconBtn>
-
-        <IconBtn>
-          <VIcon icon="ri-notification-line" />
-        </IconBtn>
 
         <NavbarThemeSwitcher class="me-2" />
 
@@ -87,11 +58,6 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 
     <!-- 👉 Pages -->
     <slot />
-
-    <!-- 👉 Footer -->
-    <template #footer>
-      <Footer />
-    </template>
   </VerticalNavLayout>
 </template>
 
