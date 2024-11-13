@@ -1,7 +1,9 @@
 /* eslint-disable regex/invalid */
+import catFace from '@images/svg/cat-face.svg'
 import checkboxChecked from '@images/svg/checkbox-checked.svg'
 import checkboxIndeterminate from '@images/svg/checkbox-indeterminate.svg'
 import checkboxUnchecked from '@images/svg/checkbox-unchecked.svg'
+import dogFace from '@images/svg/dog-face.svg'
 import radioChecked from '@images/svg/radio-checked.svg'
 import radioUnchecked from '@images/svg/radio-unchecked.svg'
 
@@ -11,6 +13,8 @@ const customIcons = {
   'mdi-minus-box': checkboxIndeterminate,
   'mdi-radiobox-marked': radioChecked,
   'mdi-radiobox-blank': radioUnchecked,
+  'mdi-dog': dogFace,
+  'mdi-cat': catFace,
 }
 
 const aliases = {

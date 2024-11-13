@@ -1,183 +1,96 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
-import avatar2 from '@images/avatars/avatar-2.png'
-import avatar3 from '@images/avatars/avatar-3.png'
-import avatar4 from '@images/avatars/avatar-4.png'
-import avatar5 from '@images/avatars/avatar-5.png'
-import avatar6 from '@images/avatars/avatar-6.png'
-import avatar7 from '@images/avatars/avatar-7.png'
-import avatar8 from '@images/avatars/avatar-8.png'
+import { watch } from 'vue'
+
+const props = defineProps({
+  filterData: {
+    type: Object,
+    default: () => {},
+  },
+  date: {
+    type: String,
+    default: '',
+  },
+})
+
+watch(
+  () => props.filterData,
+  () => {
+    console.log('filterData', props.filterData)
+  },
+)
 
 const headers = [
+  { title: 'User', key: 'username' },
+  { title: 'Animal Name', key: 'animalName' },
+  { title: 'Date', key: 'date' },
+  { title: 'Doctor', key: 'user.name' },
+  { title: 'Actions', key: 'actions' },
+]
+
+const appointments = [
   {
-    title: 'User',
-    key: 'username',
+    id: 16,
+    name: 'Luan Henriqu',
+    email: 'luan@luan.com',
+    animalName: 'Rex',
+    animalType: 'dog',
+    animalAge: '10',
+    prognostic: 'vomitando sangue',
+    period: 'morning',
+    date: '2024-11-19T00:00:00.000000Z',
+    userId: null,
+    user: null,
   },
   {
-    title: 'Email',
-    key: 'email',
-  },
-  {
-    title: 'Role',
-    key: 'role',
-  },
-  {
-    title: 'Status',
-    key: 'status',
+    id: 17,
+    name: 'Luan',
+    email: 'luan@luan.com',
+    animalName: 'Rex',
+    animalType: 'cat',
+    animalAge: '4',
+    prognostic: 'vomitando sangue',
+    period: 'afternoon',
+    date: '2024-11-20T00:00:00.000000Z',
+    userId: null,
+    user: {
+      id: 2,
+      name: 'Prof. Tyreek Runolfsdottir',
+    },
   },
 ]
 
-const userData = [
-  {
-    id: 1,
-    fullName: 'Galasasen Slixby',
-    company: 'Yotz PVT LTD',
-    role: 'editor',
-    username: 'gslixby0',
-    country: 'El Salvador',
-    contact: '(479) 232-9151',
-    email: 'gslixby0@abc.net.au',
-    currentPlan: 'enterprise',
-    status: 'inactive',
-    avatar: avatar1,
-  },
-  {
-    id: 2,
-    fullName: 'Halsey Redmore',
-    company: 'Skinder PVT LTD',
-    role: 'author',
-    username: 'hredmore1',
-    country: 'Albania',
-    contact: '(472) 607-9137',
-    email: 'hredmore1@imgur.com',
-    currentPlan: 'team',
-    status: 'pending',
-    avatar: avatar2,
-  },
-  {
-    id: 3,
-    fullName: 'Marjory Sicely',
-    company: 'Oozz PVT LTD',
-    role: 'maintainer',
-    username: 'msicely2',
-    country: 'Russia',
-    contact: '(321) 264-4599',
-    email: 'msicely2@who.int',
-    currentPlan: 'enterprise',
-    status: 'active',
-    avatar: avatar3,
-  },
-  {
-    id: 4,
-    fullName: 'Cyrill Risby',
-    company: 'Oozz PVT LTD',
-    role: 'Admin',
-    username: 'crisby3',
-    country: 'China',
-    contact: '(923) 690-6806',
-    email: 'crisby3@wordpress.com',
-    currentPlan: 'team',
-    status: 'inactive',
-    avatar: avatar4,
-  },
-  {
-    id: 5,
-    fullName: 'Maggy Hurran',
-    company: 'Aimbo PVT LTD',
-    role: 'subscriber',
-    username: 'mhurran4',
-    country: 'Pakistan',
-    contact: '(669) 914-1078',
-    email: 'mhurran4@yahoo.co.jp',
-    currentPlan: 'enterprise',
-    status: 'pending',
-    avatar: avatar5,
-  },
-  {
-    id: 6,
-    fullName: 'Silvain Halstead',
-    company: 'Jaxbean PVT LTD',
-    role: 'author',
-    username: 'shalstead5',
-    country: 'China',
-    contact: '(958) 973-3093',
-    email: 'shalstead5@shinystat.com',
-    currentPlan: 'company',
-    status: 'active',
-    avatar: avatar6,
-  },
-  {
-    id: 7,
-    fullName: 'Breena Gallemore',
-    company: 'Jazzy PVT LTD',
-    role: 'subscriber',
-    username: 'bgallemore6',
-    country: 'Canada',
-    contact: '(825) 977-8152',
-    email: 'bgallemore6@boston.com',
-    currentPlan: 'company',
-    status: 'pending',
-    avatar: avatar7,
-  },
-  {
-    id: 8,
-    fullName: 'Kathryne Liger',
-    company: 'Pixoboo PVT LTD',
-    role: 'author',
-    username: 'kliger7',
-    country: 'France',
-    contact: '(187) 440-0934',
-    email: 'kliger7@vinaora.com',
-    currentPlan: 'enterprise',
-    status: 'pending',
-    avatar: avatar8,
-  },
-]
-
-const resolveUserRoleVariant = role => {
-  const roleLowerCase = role.toLowerCase()
-  if (roleLowerCase === 'subscriber')
-    return {
-      color: 'success',
-      icon: 'ri-user-line',
-    }
-  if (roleLowerCase === 'author')
-    return {
-      color: 'error',
-      icon: 'ri-computer-line',
-    }
-  if (roleLowerCase === 'maintainer')
-    return {
-      color: 'info',
-      icon: 'ri-pie-chart-line',
-    }
-  if (roleLowerCase === 'editor')
-    return {
-      color: 'warning',
-      icon: 'ri-edit-box-line',
-    }
-  if (roleLowerCase === 'admin')
-    return {
-      color: 'primary',
-      icon: 'ri-vip-crown-line',
-    }
-  
-  return {
-    color: 'success',
-    icon: 'ri-user-line',
+const resolveAnimalTypeVariant = animalType => {
+  const animalTypes = {
+    cat: 'mdi-cat',
+    dog: 'mdi-dog',
   }
+
+  return animalTypes[animalType.toLowerCase()]
 }
 
-const resolveUserStatusVariant = stat => {
-  const statLowerCase = stat.toLowerCase()
-  if (statLowerCase === 'pending')
-    return 'warning'
-  if (statLowerCase === 'active')
-    return 'success'
-  if (statLowerCase === 'inactive')
-    return 'secondary'
-  
-  return 'primary'
+const resolvePeriodVariant = period => {
+  const periods = {
+    morning: 'Morning',
+    afternoon: 'Afternoon',
+  }
+
+  return periods[period.toLowerCase()]
+}
+
+const formatDate = date => {
+  const dateObj = new Date(date)
+
+  dateObj.setUTCMinutes(dateObj.getUTCMinutes() + dateObj.getTimezoneOffset())
+
+  return dateObj.toLocaleDateString('pt-BR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
+}
+
+const deleteAppointment = id => {
+  console.log({ id })
 }
 </script>
 
@@ -185,59 +98,56 @@ const resolveUserStatusVariant = stat => {
   <VCard>
     <VDataTable
       :headers="headers"
-      :items="userData"
+      :items="appointments"
       item-value="id"
       class="text-no-wrap"
     >
-      <!-- User -->
       <template #item.username="{ item }">
         <div class="d-flex align-center gap-x-4">
-          <VAvatar
-            size="34"
-            :variant="!item.avatar ? 'tonal' : undefined"
-            :color="!item.avatar ? resolveUserRoleVariant(item.role).color : undefined"
-          >
-            <VImg
-              v-if="item.avatar"
-              :src="item.avatar"
-            />
-          </VAvatar>
-
           <div class="d-flex flex-column">
             <h6 class="text-h6 font-weight-medium user-list-name">
-              {{ item.fullName }}
+              {{ item.name }}
             </h6>
 
-            <span class="text-sm text-medium-emphasis">@{{ item.username }}</span>
+            <span class="text-sm text-medium-emphasis">{{ item.email }}</span>
           </div>
         </div>
       </template>
-      <!-- Role -->
-      <template #item.role="{ item }">
+
+      <template #item.animalName="{ item }">
         <div class="d-flex gap-4">
           <VIcon
-            :icon="resolveUserRoleVariant(item.role).icon"
-            :color="resolveUserRoleVariant(item.role).color"
+            :icon="resolveAnimalTypeVariant(item.animalType)"
             size="22"
           />
           <div class="text-capitalize text-high-emphasis">
-            {{ item.role }}
+            {{ item.animalName }}
           </div>
         </div>
       </template>
-      <!-- Plan -->
-      <template #item.plan="{ item }">
-        <span class="text-capitalize text-high-emphasis">{{ item.currentPlan }}</span>
+
+      <template #item.date="{ item }">
+        <div class="d-flex align-center gap-x-4">
+          <div class="d-flex flex-column">
+            <h6 class="text-h6 font-weight-medium user-list-name">
+              {{ formatDate(item.date) }}
+            </h6>
+
+            <span class="text-sm text-medium-emphasis">{{ resolvePeriodVariant(item.period) }}</span>
+          </div>
+        </div>
       </template>
-      <!-- Status -->
-      <template #item.status="{ item }">
-        <VChip
-          :color="resolveUserStatusVariant(item.status)"
-          size="small"
-          class="text-capitalize"
-        >
-          {{ item.status }}
-        </VChip>
+
+      <template #item.actions="{ item }">
+        <VBtn
+          icon="ri-close-line"
+          color="error"
+          class="me-2"
+          @click="deleteAppointment(item.id)"
+        />
+        <RouterLink :to="`/account-settings/${item.id}`">
+          <VBtn icon="ri-edit-box-line" />
+        </RouterLink>
       </template>
 
       <template #bottom />
