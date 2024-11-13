@@ -9,7 +9,7 @@ export const routes = [
         component: () => import('@/pages/dashboard.vue'),
       },
       {
-        path: 'account-settings',
+        path: 'account-settings/:id?',
         component: () => import('@/pages/account-settings.vue'),
       },
       {
