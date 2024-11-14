@@ -39,6 +39,26 @@ yarn dev
 
 O projeto esta hospedado nesse [link](https://patusco.luanhdev.com/)
 
+Login no sistema como recepcionista
+```
+email: receptionist@receptionist.com
+password: password
+```
+
+Login no sistema como doutor
+```
+email: doctor1@receptionist.com
+password: password
+```
+```
+email: doctor2@receptionist.com
+password: password
+```
+```
+email: doctor3@receptionist.com
+password: password
+```
+
 ## 📫 Contribuindo para Patusco Client
 
 Para contribuir com Patusco Client, siga estas etapas:
