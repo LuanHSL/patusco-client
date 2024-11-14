@@ -40,7 +40,7 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
         <!-- eslint-enable -->
 
         <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-          Materio
+          O Patusco
         </h1>
       </RouterLink>
 

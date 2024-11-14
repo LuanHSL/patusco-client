@@ -68,16 +68,16 @@ const submit = async () => {
             v-html="logo"
           />
           <h2 class="font-weight-medium text-2xl text-uppercase">
-            Materio
+            O Patusco
           </h2>
         </div>
       </VCardItem>
 
       <VCardText class="pt-2">
-        <h4 class="text-h4 mb-1">
-          Welcome to Materio! 👋🏻
+        <h4 class="text-h4 mb-1 text-center">
+          Welcome to O Patusco! 👋🏻
         </h4>
-        <p class="mb-0">
+        <p class="mb-0 text-center">
           Please sign-in to your account and start the adventure
         </p>
       </VCardText>
