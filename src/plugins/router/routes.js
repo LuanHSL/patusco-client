@@ -1,16 +1,19 @@
 export const routes = [
-  { path: '/', redirect: '/dashboard' },
+  { path: '/', redirect: { name: 'dashboard' } },
   {
-    path: '/',
+    path: '/me/',
     component: () => import('@/layouts/default.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'dashboard',
+        name: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
       },
       {
-        path: 'account-settings/:id?',
-        component: () => import('@/pages/account-settings.vue'),
+        path: 'appointment/:id?',
+        name: 'me-appointment',
+        component: () => import('@/pages/appointment.vue'),
       },
     ],
   },
@@ -20,11 +23,17 @@ export const routes = [
     children: [
       {
         path: 'login',
+        name: 'login',
         component: () => import('@/pages/login.vue'),
       },
       {
         path: '/:pathMatch(.*)*',
         component: () => import('@/pages/[...error].vue'),
+      },
+      {
+        path: 'create-appointment',
+        name: 'create-appointment',
+        component: () => import('@/pages/appointment.vue'),
       },
     ],
   },

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import authenticationGuard from './guards/AuthenticationGuard'
 import { routes } from './routes'
 
 const router = createRouter({
@@ -6,7 +7,12 @@ const router = createRouter({
   routes,
 })
 
+router.beforeEach(async (to, from, next) => {
+  await authenticationGuard(to, from, next)
+})
+
 export default function (app) {
   app.use(router)
 }
 export { router }
+

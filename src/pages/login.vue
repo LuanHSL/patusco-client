@@ -1,15 +1,21 @@
 <script setup>
+import { useAuthStore } from '@/store/authStore'
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import { useTheme } from 'vuetify'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const form = ref({
   email: '',
   password: '',
-  remember: false,
 })
 
 const vuetifyTheme = useTheme()
@@ -18,7 +24,34 @@ const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
 })
 
+const isLoading = ref(false)
+const loginForm = ref(null)
 const isPasswordVisible = ref(false)
+
+const fieldRules = ref([
+  value => {
+    if (value) return true
+
+    return 'Field is required.'
+  },
+])
+
+const submit = async () => {
+  const { valid } = await loginForm.value.validate()
+  if (!valid) return
+
+  try {
+    isLoading.value = true
+    await authStore.login(form.value.email, form.value.password)
+
+    router.push({ name: 'dashboard' })
+  } catch (e) {
+    console.error(e)
+    toast.error(e.response.data.error)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -28,10 +61,7 @@ const isPasswordVisible = ref(false)
       max-width="448"
     >
       <VCardItem class="justify-center">
-        <RouterLink
-          to="/"
-          class="d-flex align-center gap-3"
-        >
+        <div class="d-flex align-center gap-3">
           <!-- eslint-disable vue/no-v-html -->
           <div
             class="d-flex"
@@ -40,7 +70,7 @@ const isPasswordVisible = ref(false)
           <h2 class="font-weight-medium text-2xl text-uppercase">
             Materio
           </h2>
-        </RouterLink>
+        </div>
       </VCardItem>
 
       <VCardText class="pt-2">
@@ -53,7 +83,10 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm
+          ref="loginForm"
+          @submit.prevent="submit"
+        >
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -61,6 +94,7 @@ const isPasswordVisible = ref(false)
                 v-model="form.email"
                 label="Email"
                 type="email"
+                :rules="fieldRules"
               />
             </VCol>
 
@@ -72,29 +106,16 @@ const isPasswordVisible = ref(false)
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+                class="mb-6"
+                :rules="fieldRules"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
               />
-
-              <!-- remember me checkbox -->
-              <div class="d-flex align-center justify-space-between flex-wrap my-6">
-                <VCheckbox
-                  v-model="form.remember"
-                  label="Remember me"
-                />
-
-                <a
-                  class="text-primary"
-                  href="javascript:void(0)"
-                >
-                  Forgot Password?
-                </a>
-              </div>
 
               <!-- login button -->
               <VBtn
                 block
                 type="submit"
-                to="/"
+                :loading="isLoading"
               >
                 Login
               </VBtn>

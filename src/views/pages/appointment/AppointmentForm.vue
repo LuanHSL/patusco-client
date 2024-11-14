@@ -1,7 +1,24 @@
 <script setup>
-import { onMounted } from 'vue'
+import { useAppointmentStore } from '@/store/appointmentStore'
+import { useAuthStore } from '@/store/authStore'
+import { useUserStore } from '@/store/userStore'
+import { onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const userStore = useUserStore()
+const appointmentStore = useAppointmentStore()
+
+watch(
+  () => route.params.id,
+  async() => {
+    window.location.reload()
+  },
+)
 
 const appointmentData = {
   name: '',
@@ -41,42 +58,107 @@ const animalType = [
 ]
 
 const period = [
-  { text: 'Morning', name: 'morning' },
-  { text: 'Afternoon', name: 'afternoon' },
+  { text: 'Morning', value: 'morning' },
+  { text: 'Afternoon', value: 'afternoon' },
 ]
 
-const doctors = [
-  { id: 2, name: 'Doctor 1' },
-  { id: 3, name: 'Doctor 2' },
-  { id: 4, name: 'Doctor 3' },
-]
+const doctors = ref([])
 
 const submit = async () => {
   const { valid } = await appointmentForm.value.validate()
   if (!valid) return
 
-  console.log(appointmentDataLocal.value)
+  const { id } = route.params
+
+  try {
+    if (id) {
+      if (authStore.isDoctor()) {
+        await updateAppointmentAsDoctor(parseInt(id, 10))
+      } else {
+        await updateAppointment(parseInt(id, 10))
+      }
+    } else {
+      await createAppointment()
+    }
+  
+    if (authStore.isLoggedIn()) {
+      router.push({ name: 'dashboard' })
+    }
+
+    toast.success('Appointment saved successfully')
+  } catch (error) {
+    console.error(error)
+  }
+
 }
 
-onMounted(() => {
+const fetchDoctors = async () => {
+  try {
+    await userStore.fetchDoctors()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAppointmentById = async id => {
+  try {
+    await appointmentStore.fetchAppointmentById(id)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const fetchAppointmentByIdAsDoctor = async id => {
+  try {
+    await appointmentStore.fetchAppointmentByIdAsDoctor(id)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const createAppointment = async () => {
+  try {
+    await appointmentStore.createAppointment(appointmentDataLocal.value)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+const updateAppointment = async id => {
+  try {
+    await appointmentStore.updateAppointment(id, appointmentDataLocal.value)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+const updateAppointmentAsDoctor = async id => {
+  try {
+    await appointmentStore.updateAppointmentAsDoctor(id, appointmentDataLocal.value)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+onMounted(async () => {
+  if (authStore.isReceptionist()) {
+    await fetchDoctors()
+    doctors.value = userStore.doctors
+  }
+
   const { id } = route.params
 
   if (id) {
-    appointmentDataLocal.value = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      animalName: 'Felix',
-      animalAge: 3,
-      date: '2023-01-01',
-      animalType: 'cat',
-      prognostic: 'Healthy',
-      period: 'morning',
-
-      // userId: 3,
+    if (authStore.isDoctor()) {
+      await fetchAppointmentByIdAsDoctor(parseInt(id, 10))
+    } else {
+      await fetchAppointmentById(parseInt(id, 10))
     }
+    appointmentDataLocal.value = appointmentStore.appointment
   }
-
-  // console.log(parseInt(id, 10))
 })
 </script>
 
@@ -124,7 +206,7 @@ onMounted(() => {
                 <VTextField
                   v-model="appointmentDataLocal.animalName"
                   label="Animal Name"
-                  placeholder="ThemeSelection"
+                  placeholder="Rex"
                   :rules="fieldRules"
                 />
               </VCol>
@@ -198,6 +280,7 @@ onMounted(() => {
               </VCol>
 
               <VCol
+                v-if="authStore.isReceptionist()"
                 cols="12"
                 md="6"
               >

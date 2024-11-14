@@ -1,21 +1,25 @@
 <script setup>
+import { useAuthStore } from '@/store/authStore'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+
+const authStore = useAuthStore()
 </script>
 
 <template>
   <VerticalNavLink
     :item="{
-      title: 'Analytics',
+      title: 'Dashboard',
       icon: 'ri-home-smile-line',
-      to: '/dashboard',
+      to: { name: 'dashboard' },
     }"
   />
 
   <VerticalNavLink
+    v-if="authStore.isReceptionist()"
     :item="{
-      title: 'Account Settings',
-      icon: 'ri-user-settings-line',
-      to: '/account-settings',
+      title: 'Appointment',
+      icon: 'ri-time-line',
+      to: { name: 'me-appointment' },
     }"
   />
 </template>

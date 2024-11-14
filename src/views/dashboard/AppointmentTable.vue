@@ -1,5 +1,9 @@
 <script setup>
-import { watch } from 'vue'
+import { useAppointmentStore } from '@/store/appointmentStore'
+import { useAuthStore } from '@/store/authStore'
+import { onMounted, watch } from 'vue'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const props = defineProps({
   filterData: {
@@ -14,10 +18,13 @@ const props = defineProps({
 
 watch(
   () => props.filterData,
-  () => {
-    console.log('filterData', props.filterData)
+  async() => {
+    await fetchAppointments(props.filterData)
   },
 )
+
+const appointmentStore = useAppointmentStore()
+const authStore = useAuthStore()
 
 const headers = [
   { title: 'User', key: 'username' },
@@ -27,37 +34,8 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ]
 
-const appointments = [
-  {
-    id: 16,
-    name: 'Luan Henriqu',
-    email: 'luan@luan.com',
-    animalName: 'Rex',
-    animalType: 'dog',
-    animalAge: '10',
-    prognostic: 'vomitando sangue',
-    period: 'morning',
-    date: '2024-11-19T00:00:00.000000Z',
-    userId: null,
-    user: null,
-  },
-  {
-    id: 17,
-    name: 'Luan',
-    email: 'luan@luan.com',
-    animalName: 'Rex',
-    animalType: 'cat',
-    animalAge: '4',
-    prognostic: 'vomitando sangue',
-    period: 'afternoon',
-    date: '2024-11-20T00:00:00.000000Z',
-    userId: null,
-    user: {
-      id: 2,
-      name: 'Prof. Tyreek Runolfsdottir',
-    },
-  },
-]
+const appointments = ref([])
+const isLoading = ref(false)
 
 const resolveAnimalTypeVariant = animalType => {
   const animalTypes = {
@@ -89,9 +67,38 @@ const formatDate = date => {
   })
 }
 
-const deleteAppointment = id => {
-  console.log({ id })
+const deleteAppointment = async id => {
+  try {
+    isLoading.value = true
+    await appointmentStore.deleteAppointment(id)
+
+    appointments.value = appointments.value.filter(appointment => appointment.id !== id)
+
+    toast.success('Appointment deleted successfully')
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
 }
+
+const fetchAppointments = async ({ date = null, animalType = null } = {}) => {
+  try {
+    if (authStore.isDoctor()) {
+      await appointmentStore.fetchAppointmentsAsDoctor({ date, animalType })
+    } else {
+      await appointmentStore.fetchAppointments({ date, animalType })
+    }
+
+    appointments.value = appointmentStore.appointments
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(async() => {
+  await fetchAppointments()
+})
 </script>
 
 <template>
@@ -140,12 +147,14 @@ const deleteAppointment = id => {
 
       <template #item.actions="{ item }">
         <VBtn
+          v-if="authStore.isReceptionist()"
           icon="ri-close-line"
           color="error"
           class="me-2"
+          :loading="isLoading"
           @click="deleteAppointment(item.id)"
         />
-        <RouterLink :to="`/account-settings/${item.id}`">
+        <RouterLink :to="{ name: 'me-appointment', params: { id: item.id } }">
           <VBtn icon="ri-edit-box-line" />
         </RouterLink>
       </template>

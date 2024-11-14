@@ -1,6 +1,6 @@
 <script setup>
-import AnalyticsUserTable from '@/views/dashboard/AnalyticsUserTable.vue'
-import FilterAppointment from '@/views/dashboard/FilterAppointment.vue'
+import AppointmentFilter from '@/views/dashboard/AppointmentFilter.vue'
+import AppointmentTable from '@/views/dashboard/AppointmentTable.vue'
 import { ref } from 'vue'
 
 const filterData = ref({})
@@ -13,11 +13,11 @@ const filter = data => {
 <template>
   <VRow class="match-height">
     <VCol cols="12">
-      <FilterAppointment @filter="filter" />
+      <AppointmentFilter @filter="filter" />
     </VCol>
 
     <VCol cols="12">
-      <AnalyticsUserTable :filter-data="filterData" />
+      <AppointmentTable :filter-data="filterData" />
     </VCol>
   </VRow>
 </template>
